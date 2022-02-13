@@ -68,7 +68,7 @@ Files in the model's folder generally link directly to a database. Here we do no
 ```
 
 ###### Models
-The models are still used to retrieve the file, do computational logic, and store files. It is here where this class fetches the 649 data and checks and to see if any of the numbers have matched. 
+Classes in models generally correspond to a table in a relational database. Here we do not use any database. Just a file. We treat the file as a database. The Lotto Class in lotto.php located in the models directory is used to retrieve the 649.csv file, do computational logic, and return results. It is here where this class fetches the 649 data and checks and to see if any of the numbers have matched. 
 ```
 	-> app
 		->models
