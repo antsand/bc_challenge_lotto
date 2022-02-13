@@ -61,7 +61,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "74d265f2a08ec319078a"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "1221c935fabc1c1d0fcd"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -761,7 +761,7 @@ exports = module.exports = __webpack_require__(13)(false);
 
 
 // module
-exports.push([module.i, "\n.input_container {\n  display: flex;\n  justify-content: space-between;\n  max-width: 500px;\n}\ninput {\n  height: 55px;\n  width: 55px;\n  text-align: center;\n  margin-right: 15px;\n}\n.alert {\n  min-height: 50px;\n}\n.card {\n  padding: 15px;\n  margin-bottom: 25px;\n}\n", ""]);
+exports.push([module.i, "\n.input_container {\n  display: flex;\n  justify-content: space-between;\n  max-width: 500px;\n}\ninput {\n  height: 55px;\n  width: 55px;\n  text-align: center;\n  margin-right: 15px;\n}\n.alert {\n  min-height: 50px;\n}\n.card {\n  padding: 15px;\n  margin-bottom: 25px;\n}\n.results {\n  padding-bottom: 45px;\n}\n", ""]);
 
 // exports
 
@@ -13445,7 +13445,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue__["default"].use(__WEBPACK_IMPORTED_MODULE_1_vue
 __WEBPACK_IMPORTED_MODULE_0_vue__["default"].component('dashboard', __WEBPACK_IMPORTED_MODULE_2__dashboard_vue__["a" /* default */]);
 
 var vm = new __WEBPACK_IMPORTED_MODULE_0_vue__["default"]({
-  el: '.boat'
+  el: '.lotto'
 });
 
 window.vm = vm;
@@ -15916,7 +15916,7 @@ var render = function() {
     _c("br"),
     _vm._v(" "),
     _vm.results
-      ? _c("div", [
+      ? _c("div", { staticClass: "results" }, [
           _vm.results.lotto_win
             ? _c(
                 "div",
@@ -15929,21 +15929,19 @@ var render = function() {
                   _vm._l(_vm.results.lotto_win, function(result) {
                     return _c("div", [
                       _c("p", [
-                        _c("b", [
-                          _vm._v("Lottery #: "),
-                          _c("span", {
-                            domProps: { innerHTML: _vm._s(result.id) }
-                          })
-                        ]),
-                        _vm._v(" "),
+                        _vm._v("\n\t\t\t\t\t\tLottery # "),
+                        _c("span", {
+                          domProps: { innerHTML: _vm._s(result.id) }
+                        }),
+                        _vm._v("\n\t\t\t\t\t\tDate: "),
                         _c("span", {
                           domProps: { innerHTML: _vm._s(result.year) }
                         }),
-                        _vm._v(" "),
+                        _vm._v("\n\t\t\t\t\t\tGot "),
                         _c("span", {
                           domProps: { innerHTML: _vm._s(result.match) }
                         }),
-                        _vm._v("\n\t\t\t\t\t\tWon: "),
+                        _vm._v(" matches right.  \n\t\t\t\t\t\tWon: "),
                         _c("span", {
                           domProps: { innerHTML: _vm._s(result.won) }
                         })

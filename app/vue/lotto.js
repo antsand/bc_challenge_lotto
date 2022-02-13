@@ -7,7 +7,7 @@ Vue.use(VueResource);
 Vue.component('dashboard', dashboard);
 
 var vm = new Vue({
-  el: '.boat',
+  el: '.lotto',
 })
 
 window.vm = vm;

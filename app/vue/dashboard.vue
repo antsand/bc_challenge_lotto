@@ -19,14 +19,14 @@ Note: A number cannot be greater than 49.
 			<button class="btn btn-primary" @click="check">Check the Numbers</button>
 		</div>
 		<br>
-		<div v-if="results">
+		<div v-if="results" class="results">
 			<div class="" v-if="results.lotto_win">
 				<h4>Times you won equal to or more than $85 </h4>
 				<div v-for="result in results.lotto_win">
 					<p>
-						<b>Lottery #: <span v-html="result.id"></span></b> 
-						<span v-html="result.year"></span>
-						<span v-html="result.match"></span>
+						Lottery # <span v-html="result.id"></span>
+						Date: <span v-html="result.year"></span>
+						Got <span v-html="result.match"></span> matches right.  
 						Won: <span v-html="result.won"></span>
 					</p>
 				</div>
@@ -162,6 +162,10 @@ export default {
 	.card {
 		padding:15px;
 		margin-bottom: 25px;
+	}
+
+	.results {
+		padding-bottom:45px;
 	}
 
 </style>
