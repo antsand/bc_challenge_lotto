@@ -1,7 +1,15 @@
 <div class="page-header">
-    <h1>Congratulations!</h1>
+    <h1>Lotto</h1>
 </div>
 
-<p>You're now flying with Phalcon. Great things are about to happen!</p>
+<p>Let us see if you have won the Lotto!!</p>
 
 <p>This page is located at <code>views/index/index.volt</code></p>
+
+<div class="boat">
+	<dashboard></dashboard>
+</div>
+
+
+<script src="/builds/production/js/dist/lotto.bundle.js">	
+

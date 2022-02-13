@@ -1,0 +1,23 @@
+{
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development webpack --progress --hide-modules --hot",
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules --hot"
+  },
+  "dependencies": {
+    "breakpoint-sass": "^2.7.1",
+    "vue": "^2.5.16",
+    "style-loader": "^2.0.0",
+    "vue-template-compiler": "^2.5.16"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "cross-env": "^5.1.4",
+    "vue-loader": "^13.7.1",
+    "vue-resource": "^1.5.0",
+    "node-sass": "^4.14.1",
+    "sass-loader": "^3.2.3",
+    "css-loader": "^0.28.11",
+    "webpack": "^3.11.0"
+  }
+}
