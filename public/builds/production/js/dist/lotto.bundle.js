@@ -61,7 +61,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "71ffcead0a9be356467e"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "22e91816536fe31d7a96"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -761,7 +761,7 @@ exports = module.exports = __webpack_require__(13)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -13052,6 +13052,11 @@ process.umask = function() { return 0; };
 //
 //
 //
+//
+//
+//
+//
+//
 
 //import table_view from './table.vue'
 //import create_boat from './create.vue'
@@ -13063,10 +13068,18 @@ process.umask = function() { return 0; };
 			lotto_num: [],
 			duplicates: null,
 			error: null,
+			error_str: null,
+			error_dup: null,
+			error_greater: null,
+			error_string: null,
+			error_zero: null,
+			error_null: null,
 			results: null,
 			dup: [],
 			greater_49: [],
-			lotto_num_enter: 6
+			lotto_num_enter: 6,
+			num_string: [],
+			num_zero: []
 		};
 	},
 	components: {
@@ -13085,56 +13098,164 @@ process.umask = function() { return 0; };
 		dup: {
 			handler: function () {},
 			deep: true
+		},
+		num_string: {
+			handler: function () {},
+			deep: true
+		},
+		num_zero: {
+			handler: function () {},
+			deep: true
+		},
+		greater_49: {
+			handler: function () {},
+			deep: true
 		}
 	},
 	methods: {
-		check_error() {
-			this.check_num_greater_49();
-			this.check_duplicates();
-		},
-		check_num_greater_49: function () {
-			var index;
-			var max = false;
-			this.greater_49 = [];
-			for (index = 0; index < 6; index++) {
-				if (this.lotto_num[index] > 49) {
-					this.error = "Numbers  cannot be more than 49";
-					this.greater_49.push(index);
-					max = true;
-					return true;
+		check_error(i = null) {
+			var error = false;
+			if (!(this.check_num_greater_49(i) || this.check_duplicates(i) || this.check_string(i) || this.check_zero(i))) {
+				error = true;
+			}
+			/* if there are no dups at this index, check if other dups too are rectified 
+    * There will always be a pair of dups. If no pair, then clean it up.
+   */
+			if (this.dup.length % 2) {
+				var dup = this.check_all_dup();
+				if (!dup) {
+					this.error_dup = null;
 				}
 			}
-			if (!max) {
-				this.error = null;
-				return false;
+			/*
+   if (!error) {
+   	var str = this.check_all_strings();
+   	if (!str) {
+   		this.error_string = null;
+   	}
+   }
+   */
+			return error;
+		},
+		array_push(push_array, value) {
+			/* do no add duplicate index to an array.
+    * Check before pushing.
+    */
+			if (!push_array.includes(value)) {
+				push_array.push(value);
 			}
 		},
-		check_duplicates: function () {
-			var index, i;
-			this.dup = [];
-			for (index = 0; index < this.lotto_num.length - 1; index++) {
-				for (i = index + 1; i < this.lotto_num.length; i++) {
-					if (this.lotto_num[index] == this.lotto_num[i]) {
-						this.error = "There cannot be duplicate numbers";
-						this.duplciates = true;
-						this.dup.push(i);
-						this.dup.push(index);
-						return true;
-					}
+		array_pop(pop_array, value) {
+			var array_index = pop_array.indexOf(value);
+			if (array_index > -1) {
+				pop_array.splice(array_index, 1);
+			}
+		},
+		remove_error(error_array, string_obj) {
+			if (!error_array.length) {
+				string_obj = null;
+			}
+		},
+		check_string: function (index) {
+			var error = false;
+			if (isNaN(parseInt(this.lotto_num[index])) && this.lotto_num[index]) {
+				this.error_string = "Cannot enter strings";
+				this.array_push(this.num_string, index);
+				error = true;
+				this.error = true;
+			}
+			if (!error) {
+				this.array_pop(this.num_string, index);
+				this.remove_error(this.num_string, this.error_string);
+			}
+			return error;
+		},
+		check_all_strings() {
+			var i,
+			    error = 0;
+			for (i = 0; i < 6; i++) {
+				var ret = this.check_string(i);
+				if (ret) {
+					error = 1;
 				}
 			}
+			return error;
+		},
+		check_zero: function (index) {
+			var error = false;
+			if (parseInt(this.lotto_num[index]) === 0) {
+				this.error_zero = "Numbers  cannot be 0";
+				this.array_push(this.num_zero, index);
+				error = true;
+				this.error = true;
+			}
+			if (!error) {
+				this.array_pop(this.num_zero, index);
+				this.remove_error(this.num_zero, this.error_zero);
+			}
+			return error;
+		},
+		check_num_greater_49: function (index) {
+			var error = false;
+			if (this.lotto_num[index] > 49) {
+				this.error_greater = "Numbers  cannot be more than 49";
+				this.array_push(this.greater_49, index);
+				error = true;
+				this.error = true;
+			}
+			if (!error) {
+				this.array_pop(this.greater_49, index);
+				this.remove_error(this.greater_49, this.error_greater);
+			}
+			return error;
+		},
+		check_duplicates: function (index) {
+			var error = false;
+			var i;
+			for (i = 0; i < this.lotto_num.length; i++) {
+				if (i == index) {
+					continue;
+				}
+				if (this.lotto_num[index] == this.lotto_num[i]) {
+					this.error_dup = "There cannot be duplicate numbers";
+					this.array_push(this.dup, i);
+					this.array_push(this.dup, index);
+					error = true;
+					this.error = true;
+				}
+			}
+			if (!error) {
+				this.array_pop(this.dup, index);
+				this.remove_error(this.dup, this.error_dup);
+			}
+			return error;
+		},
+		check_all_dup() {
+			var i,
+			    error = 0;
+			for (i = 0; i < 6; i++) {
+				var ret = this.check_duplicates(i);
+				if (ret) {
+					error = 1;
+				}
+			}
+			return error;
 		},
 		check_null: function () {
-			var index;
-			for (index = 0; index < 6; index++) {
-				if (!this.lotto_num[index]) {
-					this.error = "Cannot be null";
-					return true;
+			var i,
+			    error = false;
+			this.error_null = null;
+			for (i = 0; i < 6; i++) {
+				if (!this.lotto_num[i]) {
+					this.error_null = "Cannot be null";
+					error = true;
+					this.error = true;
 				}
 			}
+			return error;
 		},
 		check: function () {
-			if (this.check_null() || this.check_duplicates() || this.check_num_greater_49()) {
+			if (this.check_null()) {
 				this.results = null;
 				return;
 			}
@@ -15759,11 +15880,24 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _c("div", {
-        staticClass: "danger alert-danger alert",
-        class: { hidden: !_vm.error },
-        domProps: { innerHTML: _vm._s(_vm.error) }
-      }),
+      _c(
+        "div",
+        {
+          staticClass: "danger alert-danger alert",
+          class: { hidden: !_vm.error }
+        },
+        [
+          _c("div", { domProps: { innerHTML: _vm._s(_vm.error_string) } }),
+          _vm._v(" "),
+          _c("div", { domProps: { innerHTML: _vm._s(_vm.error_dup) } }),
+          _vm._v(" "),
+          _c("div", { domProps: { innerHTML: _vm._s(_vm.error_greater) } }),
+          _vm._v(" "),
+          _c("div", { domProps: { innerHTML: _vm._s(_vm.error_zero) } }),
+          _vm._v(" "),
+          _c("div", { domProps: { innerHTML: _vm._s(_vm.error_null) } })
+        ]
+      ),
       _vm._v(" "),
       _c(
         "div",
@@ -15782,15 +15916,14 @@ var render = function() {
             class: {
               "dup-error": _vm.dup.includes(i - 1),
               "greater-error": _vm.greater_49.includes(i - 1),
-              "no-error": !(
-                _vm.dup.includes(i - 1) | _vm.greater_49.includes(i - 1)
-              )
+              "str-error": _vm.num_string.includes(i - 1),
+              "zero-error": _vm.num_zero.includes(i - 1)
             },
             attrs: { type: "text" },
             domProps: { value: _vm.lotto_num[i - 1] },
             on: {
               keyup: function($event) {
-                return _vm.check_error()
+                return _vm.check_error(i - 1)
               },
               input: function($event) {
                 if ($event.target.composing) {
