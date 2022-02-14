@@ -126,6 +126,7 @@ export default {
 				}
 			}
 			/* TODO: Need to check if errors are cleaned up properly */
+			/*
 			if (!error) {
 				var str = this.check_all_strings();
 				if (!str) {
