@@ -125,7 +125,7 @@ export default {
 					this.error_dup = null;
 				}
 			}
-			/*
+			/* TODO: Need to check if errors are cleaned up properly */
 			if (!error) {
 				var str = this.check_all_strings();
 				if (!str) {
@@ -136,6 +136,8 @@ export default {
 			return error;
 	
 		},
+		/* This functions pushes the index of the box
+		   that has a particular error */
 		array_push(push_array, value) {
 			/* do no add duplicate index to an array.
 			 * Check before pushing.
@@ -144,17 +146,25 @@ export default {
 				push_array.push(value);
 			}	
 		},
+		/* This function pops the index of the box
+		   that has not have this specific error 
+		 */
 		array_pop(pop_array, value) {
 			var array_index = pop_array.indexOf(value);	
 			if (array_index > -1) {
 				pop_array.splice(array_index, 1);
 			}
 		},
+		/* If there are no errors in the array
+		 * clean up the error message. 
+                   TODO: This needs fine tuning.
+                 */	
 		remove_error(error_array, string_obj) {
 			if (!error_array.length) {
 			     string_obj = null;
 			}
 		},
+		/* check if there are strings entrered into the box */
 		check_string:function(index) {
 			var error = false;
 			if (isNaN(parseInt(this.lotto_num[index])) && (this.lotto_num[index])) {
@@ -179,6 +189,7 @@ export default {
 			}
 			return error;
 		},
+		/* check if there are zeros entrered into the box */
 		check_zero: function(index) {
 			var error = false;	
 			if (parseInt(this.lotto_num[index]) === 0) {
@@ -193,6 +204,7 @@ export default {
 			}
 			return error;
 		},
+		/* check if there are numbers greater than 49 entrered into the box */
 		check_num_greater_49:function(index) {
 			var error = false;	
 			if (this.lotto_num[index] > 49) {
@@ -206,7 +218,8 @@ export default {
 				this.remove_error(this.greater_49, this.error_greater);
 			}
 			return error;
-		},	
+		},
+		/* check if there are duplicates entrered into the box */
     		check_duplicates: function(index) {
 			var error = false;
 			var i;
