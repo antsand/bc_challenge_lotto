@@ -5,15 +5,10 @@
 				Enter 6 numbers (between 1 and 49) and we will check them against every 6/49 draw since 1981, and calculate your net winnings or losings.  
 Note: A number cannot be greater than 49.
 			</div>
-			<div v-html="error" class="danger alert-danger alert">
+			<div v-html="error" class="danger alert-danger alert" v-bind:class="{'hidden': !error }">
 			</div>	
 			<div class="input_container">
-				<input type="text" v-model="lotto_num[0]" class="input_num" @keyup="check_num_greater_49(lotto_num[0])">
-				<input type="text" v-model="lotto_num[1]" class="input_num" @keyup="check_num_greater_49(lotto_num[1])">
-				<input type="text" v-model="lotto_num[2]" class="input_num" @keyup="check_num_greater_49(lotto_num[2])">
-				<input type="text" v-model="lotto_num[3]" class="input_num" @keyup="check_num_greater_49(lotto_num[3])">
-				<input type="text" v-model="lotto_num[4]" class="input_num" @keyup="check_num_greater_49(lotto_num[4])">
-				<input type="text" v-model="lotto_num[5]" class="input_num" @keyup="check_num_greater_49(lotto_num[5])">
+				<input type="text" v-for="i in lotto_num_enter" v-model="lotto_num[i-1]" class="input_num" @keyup="check_error()" v-bind:class="{'dup-error': dup.includes(i-1), 'greater-error': greater_49.includes(i-1), 'no-error': !(dup.includes(i-1) | greater_49.includes(i-1))}">
 			</div>
 			<br>
 			<button class="btn btn-primary" @click="check">Check the Numbers</button>
@@ -55,6 +50,9 @@ export default {
 			duplicates: null,
 			error: null,
 			results:null,	
+			dup:[],
+			greater_49:[],
+			lotto_num_enter:6
 		}
 	},
 	components: {
@@ -73,15 +71,27 @@ export default {
 
 			},
 			deep: true,	
+		},
+		dup: {
+			handler: function() {
+
+			},
+			deep: true,	
 		}
 	},
 	methods: {
+		check_error() {
+			this.check_num_greater_49();
+			this.check_duplicates();
+		},
 		check_num_greater_49:function() {
 			var index;
 			var max = false;	
+			this.greater_49 = [];
 			for (index = 0; index < 6; index++ ) {
 				if (this.lotto_num[index] > 49) {
 					this.error = "Numbers  cannot be more than 49";
+					this.greater_49.push(index);
 					max = true;
 					return true;
 				}
@@ -93,11 +103,14 @@ export default {
 		},	
     		check_duplicates: function() {
 			var index, i;
+			this.dup = [];
 			for (index = 0; index < this.lotto_num.length - 1; index++ ) {	
 				for (i = index+1; i < this.lotto_num.length ; i++ ) {	
 					if (this.lotto_num[index] == this.lotto_num[i]) {
 						this.error = "There cannot be duplicate numbers";
 						this.duplciates = true;
+						this.dup.push(i);
+						this.dup.push(index);
 						return true;
 					}
 				}
@@ -114,6 +127,7 @@ export default {
 		},
 		check: function() {
 		     if (this.check_null() || this.check_duplicates() || this.check_num_greater_49()) {
+			        this.results = null;
 				return;
 		     } 
 		     this.error = null;		
@@ -144,28 +158,4 @@ export default {
 
 </script>
 <style lang="scss">
-
-	.input_container {
-		display:flex;
-		justify-content: space-between;
-		max-width: 500px;
-	}
-	input {
-		height:55px;
-		width:55px;
-		text-align:center;
-		margin-right:15px;
-	}
-	.alert {
-		min-height:50px;
-	}	
-	.card {
-		padding:15px;
-		margin-bottom: 25px;
-	}
-
-	.results {
-		padding-bottom:45px;
-	}
-
 </style>

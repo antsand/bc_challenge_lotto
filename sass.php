@@ -9,7 +9,7 @@
 	$sass = new Sass();
 	try {
 		$sass->setIncludePath(getcwd() . '/node_modules/:' . getcwd() . '/app/sass/');
-		$css_file = file_get_contents(getcwd() . '/app/sass/main.scss');
+		$css_file = file_get_contents(getcwd() . '/app/sass/lotto.scss');
 		$sass->setStyle(Sass::STYLE_COMPRESSED);
 		$css = $sass->compile($css_file);
 		file_put_contents(getcwd() . '/public/css/main.css', $css);

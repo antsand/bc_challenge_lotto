@@ -61,7 +61,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "1221c935fabc1c1d0fcd"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "71ffcead0a9be356467e"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -761,7 +761,7 @@ exports = module.exports = __webpack_require__(13)(false);
 
 
 // module
-exports.push([module.i, "\n.input_container {\n  display: flex;\n  justify-content: space-between;\n  max-width: 500px;\n}\ninput {\n  height: 55px;\n  width: 55px;\n  text-align: center;\n  margin-right: 15px;\n}\n.alert {\n  min-height: 50px;\n}\n.card {\n  padding: 15px;\n  margin-bottom: 25px;\n}\n.results {\n  padding-bottom: 45px;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -13052,11 +13052,6 @@ process.umask = function() { return 0; };
 //
 //
 //
-//
-//
-//
-//
-//
 
 //import table_view from './table.vue'
 //import create_boat from './create.vue'
@@ -13068,7 +13063,10 @@ process.umask = function() { return 0; };
 			lotto_num: [],
 			duplicates: null,
 			error: null,
-			results: null
+			results: null,
+			dup: [],
+			greater_49: [],
+			lotto_num_enter: 6
 		};
 	},
 	components: {
@@ -13083,15 +13081,25 @@ process.umask = function() { return 0; };
 		result: {
 			handler: function () {},
 			deep: true
+		},
+		dup: {
+			handler: function () {},
+			deep: true
 		}
 	},
 	methods: {
+		check_error() {
+			this.check_num_greater_49();
+			this.check_duplicates();
+		},
 		check_num_greater_49: function () {
 			var index;
 			var max = false;
+			this.greater_49 = [];
 			for (index = 0; index < 6; index++) {
 				if (this.lotto_num[index] > 49) {
 					this.error = "Numbers  cannot be more than 49";
+					this.greater_49.push(index);
 					max = true;
 					return true;
 				}
@@ -13103,11 +13111,14 @@ process.umask = function() { return 0; };
 		},
 		check_duplicates: function () {
 			var index, i;
+			this.dup = [];
 			for (index = 0; index < this.lotto_num.length - 1; index++) {
 				for (i = index + 1; i < this.lotto_num.length; i++) {
 					if (this.lotto_num[index] == this.lotto_num[i]) {
 						this.error = "There cannot be duplicate numbers";
 						this.duplciates = true;
+						this.dup.push(i);
+						this.dup.push(index);
 						return true;
 					}
 				}
@@ -13124,6 +13135,7 @@ process.umask = function() { return 0; };
 		},
 		check: function () {
 			if (this.check_null() || this.check_duplicates() || this.check_num_greater_49()) {
+				this.results = null;
 				return;
 			}
 			this.error = null;
@@ -15749,160 +15761,48 @@ var render = function() {
       _vm._v(" "),
       _c("div", {
         staticClass: "danger alert-danger alert",
+        class: { hidden: !_vm.error },
         domProps: { innerHTML: _vm._s(_vm.error) }
       }),
       _vm._v(" "),
-      _c("div", { staticClass: "input_container" }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.lotto_num[0],
-              expression: "lotto_num[0]"
-            }
-          ],
-          staticClass: "input_num",
-          attrs: { type: "text" },
-          domProps: { value: _vm.lotto_num[0] },
-          on: {
-            keyup: function($event) {
-              return _vm.check_num_greater_49(_vm.lotto_num[0])
-            },
-            input: function($event) {
-              if ($event.target.composing) {
-                return
+      _c(
+        "div",
+        { staticClass: "input_container" },
+        _vm._l(_vm.lotto_num_enter, function(i) {
+          return _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.lotto_num[i - 1],
+                expression: "lotto_num[i-1]"
               }
-              _vm.$set(_vm.lotto_num, 0, $event.target.value)
+            ],
+            staticClass: "input_num",
+            class: {
+              "dup-error": _vm.dup.includes(i - 1),
+              "greater-error": _vm.greater_49.includes(i - 1),
+              "no-error": !(
+                _vm.dup.includes(i - 1) | _vm.greater_49.includes(i - 1)
+              )
+            },
+            attrs: { type: "text" },
+            domProps: { value: _vm.lotto_num[i - 1] },
+            on: {
+              keyup: function($event) {
+                return _vm.check_error()
+              },
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.lotto_num, i - 1, $event.target.value)
+              }
             }
-          }
+          })
         }),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.lotto_num[1],
-              expression: "lotto_num[1]"
-            }
-          ],
-          staticClass: "input_num",
-          attrs: { type: "text" },
-          domProps: { value: _vm.lotto_num[1] },
-          on: {
-            keyup: function($event) {
-              return _vm.check_num_greater_49(_vm.lotto_num[1])
-            },
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.$set(_vm.lotto_num, 1, $event.target.value)
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.lotto_num[2],
-              expression: "lotto_num[2]"
-            }
-          ],
-          staticClass: "input_num",
-          attrs: { type: "text" },
-          domProps: { value: _vm.lotto_num[2] },
-          on: {
-            keyup: function($event) {
-              return _vm.check_num_greater_49(_vm.lotto_num[2])
-            },
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.$set(_vm.lotto_num, 2, $event.target.value)
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.lotto_num[3],
-              expression: "lotto_num[3]"
-            }
-          ],
-          staticClass: "input_num",
-          attrs: { type: "text" },
-          domProps: { value: _vm.lotto_num[3] },
-          on: {
-            keyup: function($event) {
-              return _vm.check_num_greater_49(_vm.lotto_num[3])
-            },
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.$set(_vm.lotto_num, 3, $event.target.value)
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.lotto_num[4],
-              expression: "lotto_num[4]"
-            }
-          ],
-          staticClass: "input_num",
-          attrs: { type: "text" },
-          domProps: { value: _vm.lotto_num[4] },
-          on: {
-            keyup: function($event) {
-              return _vm.check_num_greater_49(_vm.lotto_num[4])
-            },
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.$set(_vm.lotto_num, 4, $event.target.value)
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.lotto_num[5],
-              expression: "lotto_num[5]"
-            }
-          ],
-          staticClass: "input_num",
-          attrs: { type: "text" },
-          domProps: { value: _vm.lotto_num[5] },
-          on: {
-            keyup: function($event) {
-              return _vm.check_num_greater_49(_vm.lotto_num[5])
-            },
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.$set(_vm.lotto_num, 5, $event.target.value)
-            }
-          }
-        })
-      ]),
+        0
+      ),
       _vm._v(" "),
       _c("br"),
       _vm._v(" "),
